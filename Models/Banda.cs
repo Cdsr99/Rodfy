@@ -24,12 +24,14 @@ class Singer
         this.score.Add(score);
     }
 
-    public void ExibirDiscografia()
+    public void ShowDetails()
     {
         Console.WriteLine($"Singer's discography {Name}");
         foreach (Album album in albuns)
         {
-            Console.WriteLine($"Álbum: {album.Name} ({album.TotalTime})");
+            Console.WriteLine($"Album: {album.Name} ({album.TotalTime})");
         }
+
+        Console.WriteLine($"\nand the score is {this.Average}");
     }
 }

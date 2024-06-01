@@ -51,33 +51,47 @@ void ShowMenu()
     Console.WriteLine("Enter 3 to rate a singer");
     Console.WriteLine("Enter 4 to display the average of a singer");
     Console.WriteLine("Enter 5 to show singers details");
+    Console.WriteLine("Enter 6 to create an album");
     Console.WriteLine("Type -1 to exit");
 
     Console.Write("\nEnter your option: ");
     string chosenOption = Console.ReadLine()!;
     int chosenOptionNumeric = int.Parse(chosenOption);
-    
-    switch (chosenOptionNumeric)
+
+    if (string.IsNullOrEmpty(chosenOption))
     {
-        case 1: RegisterSingers();
-            break;
-        case 2:
-            ShowSingers();
-            break;
-        case 3:
-            RateSinger();
-            break;
-        case 4:
-            SingerAverage();
-            break;
-        case 5:
-            ShowDetails();
-            break;
-        case -1: Console.WriteLine("Bye bye :)");
-            break;
-        default: Console.WriteLine("Incorrect option");
-            break;
+        Console.WriteLine("Incorrect option");
+        Thread.Sleep(2000);
+        ShowMenu();
     }
+    else
+    {
+        switch (chosenOptionNumeric)
+        {
+            case 1: RegisterSingers();
+                break;
+            case 2:
+                ShowSingers();
+                break;
+            case 3:
+                RateSinger();
+                break;
+            case 4:
+                SingerAverage();
+                break;
+            case 5:
+                ShowDetails();
+                break;
+            case 6:
+                CreateAlbum();
+                break;
+            case -1: Console.WriteLine("Bye bye :)");
+                break;
+            default: Console.WriteLine("Incorrect option");
+                break;
+        }
+    }
+
 }
 #endregion
 
@@ -143,22 +157,7 @@ void RateSinger()
     }
     else
     {
-        Console.WriteLine($"\nThe singer has not been registered, do you want to create?");
-        Console.WriteLine($"\ny - yes and n - no");
-        string choseOption = Console.ReadLine()!;
-
-        if (choseOption == "y")
-        {
-            RegisterSingers();
-        }
-        else if (choseOption == "n")
-        {
-            ShowMenu();
-        }
-        else
-        {
-            ShowMenu();
-        }
+        SingerNotCreated();
     }
 }
 #endregion
@@ -183,22 +182,7 @@ void SingerAverage()
     }
     else
     {
-        Console.WriteLine($"\nThe singer has not been registered, do you want to create?");
-        Console.WriteLine($"\ny - yes and n - no");
-        string choseOption = Console.ReadLine()!;
-
-        if (choseOption == "y")
-        {
-            RegisterSingers();
-        }
-        else if (choseOption == "n")
-        {
-            ShowMenu();
-        }
-        else
-        {
-            ShowMenu();
-        }
+        SingerNotCreated();
     }
 }
 #endregion
@@ -214,8 +198,8 @@ void ShowDetails()
     {
         Singer singer1 = singersList[singer];
         
-        Console.WriteLine($"\nThe {singer1.Name} score is {singer1.Average}.");
-
+        singer1.ShowDetails();
+        
         Console.WriteLine("Press any key to go to the menu again");
         Console.ReadKey();
         Console.Clear();
@@ -224,14 +208,43 @@ void ShowDetails()
     }
     else
     {
-        Console.WriteLine($"\n{singer} has not found!");
-        Console.WriteLine("Press any key to go to the menu again");
-        Console.ReadKey();
-        Console.Clear();
-        ShowMenu();
+        SingerNotCreated();
     }
 }
 
+
+#endregion
+
+#region #6 - Creating an Album
+
+void CreateAlbum()
+{
+    Console.Clear();
+    ShowOptionsTitle("Create an Album");
+    Console.Write("Enter with the name of the singer of the album: ");
+    string singerName = Console.ReadLine()!;
+
+    if (singersList.ContainsKey(singerName))
+    {
+        Console.Write("Now enter with the name of the album: ");
+        string albumsName = Console.ReadLine()!;
+
+        Singer singer1 = singersList[singerName];
+        Album album1 = new Album(albumsName);
+        singer1.AddAlbum(album1);
+
+        Console.WriteLine($"The album {albumsName} of {singerName} has been registered successfully!");
+        Thread.Sleep(4000);
+        Console.Clear();
+    }
+    else
+    {
+        SingerNotCreated();
+    }
+    
+
+    ShowMenu();
+}
 
 #endregion
 
@@ -244,6 +257,30 @@ void ShowOptionsTitle(string title)
     Console.WriteLine(title);
     Console.WriteLine(asterisk);
 }
+#endregion
+
+#region Wanna create a singer?
+
+void SingerNotCreated()
+{
+    Console.WriteLine($"\nThe singer has not been registered, do you want to create?");
+    Console.Write($"\ny - yes and n - no: ");
+    string choseOption = Console.ReadLine()!;
+
+    if (choseOption == "y")
+    {
+        RegisterSingers();
+    }
+    else if (choseOption == "n")
+    {
+        ShowMenu();
+    }
+    else
+    {
+        ShowMenu();
+    }
+}
+
 #endregion
 
 
