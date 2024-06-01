@@ -1,11 +1,29 @@
 ﻿// Screen Sound
+using Rodfy.Models;
 string welcome = "Welcome to RodFy";
-//List<string> singersList = new List<string>{"Justin Bieber","Eminem", "Ice Cube"};  
-Dictionary<string, List<int>> singersList = new Dictionary<string, List<int>>();
 
-singersList.Add("Eminem", new List<int>{10, 10, 9, 8, 7});
-singersList.Add("50 Cent", new List<int>{6, 3, 9, 7, 8});
-singersList.Add("Dr Dre", new List<int>{7, 1, 4, 7, 3});
+Singer Eminem = new("Eminem");
+Eminem.AddScore(10);
+Eminem.AddScore(10);
+Eminem.AddScore(10);
+Eminem.AddScore(10);
+Eminem.AddScore(10);
+Eminem.AddScore(10);
+Eminem.AddScore(9);
+
+Singer LuisaSouza = new("LuisaSouza");
+LuisaSouza.AddScore(0);
+LuisaSouza.AddScore(0);
+LuisaSouza.AddScore(0);
+LuisaSouza.AddScore(0);
+LuisaSouza.AddScore(0);
+LuisaSouza.AddScore(0);
+LuisaSouza.AddScore(0);
+
+
+Dictionary<string, Singer> singersList = new Dictionary<string, Singer>();
+
+singersList.Add(Eminem.Name, Eminem);
 
 #region Showing the logo
 void ShowLogo()
@@ -32,6 +50,7 @@ void ShowMenu()
     Console.WriteLine("Enter 2 to show all singers");
     Console.WriteLine("Enter 3 to rate a singer");
     Console.WriteLine("Enter 4 to display the average of a singer");
+    Console.WriteLine("Enter 5 to show singers details");
     Console.WriteLine("Type -1 to exit");
 
     Console.Write("\nEnter your option: ");
@@ -40,7 +59,7 @@ void ShowMenu()
     
     switch (chosenOptionNumeric)
     {
-        case 1: RegisterSongs();
+        case 1: RegisterSingers();
             break;
         case 2:
             ShowSingers();
@@ -51,6 +70,9 @@ void ShowMenu()
         case 4:
             SingerAverage();
             break;
+        case 5:
+            ShowDetails();
+            break;
         case -1: Console.WriteLine("Bye bye :)");
             break;
         default: Console.WriteLine("Incorrect option");
@@ -60,7 +82,7 @@ void ShowMenu()
 #endregion
 
 #region #1 - Register a Singer
-void RegisterSongs()
+void RegisterSingers()
 {
     Console.Clear();
     ShowOptionsTitle("Register singer");
@@ -68,7 +90,8 @@ void RegisterSongs()
     string? singersName = Console.ReadLine();
     if (singersName != null)
     {
-        singersList.Add(singersName, new List<int>());
+        Singer singer = new(singersName);
+        singersList.Add(singer.Name, singer);
         Console.Write($"The singer {singersName} has been create with success!");
     }
 
@@ -105,11 +128,14 @@ void RateSinger()
 
     Console.Write("Please, enter with the singer's names: ");
     string singer = Console.ReadLine()!;
+    
     if (singersList.ContainsKey(singer))
     {
+        Singer singer1 = singersList[singer];
         Console.Write($"\nRate the singer {singer}: ");
         int score = int.Parse(Console.ReadLine()!);
-        singersList[singer].Add(score);
+        
+        singer1.AddScore(score);
         Console.WriteLine($"\nSinger {singer}'s note was successfully registered");
         Thread.Sleep(3000);
         Console.Clear();
@@ -123,7 +149,7 @@ void RateSinger()
 
         if (choseOption == "y")
         {
-            RegisterSongs();
+            RegisterSingers();
         }
         else if (choseOption == "n")
         {
@@ -145,11 +171,12 @@ void SingerAverage()
 
     Console.Write("Please, enter with the singer's names: ");
     string singer = Console.ReadLine()!;
+    
     if (singersList.ContainsKey(singer))
     {
-        Double average = singersList[singer].Average();
+        Singer singer1 = singersList[singer];
         
-        Console.Write($"\nThe singer's rating is {average}");
+        Console.Write($"\nThe singer's rating is {singer1.Average}");
         Thread.Sleep(3000);
         Console.Clear();
         ShowMenu();
@@ -162,7 +189,7 @@ void SingerAverage()
 
         if (choseOption == "y")
         {
-            RegisterSongs();
+            RegisterSingers();
         }
         else if (choseOption == "n")
         {
@@ -174,6 +201,38 @@ void SingerAverage()
         }
     }
 }
+#endregion
+
+#region #5 - Showing singers details
+void ShowDetails()
+{
+    Console.Clear();
+    ShowOptionsTitle("Showing Singers Details");
+    Console.Write("Enter with the name of the singer you want to know better: ");
+    string singer = Console.ReadLine()!;
+    if (singersList.ContainsKey(singer))
+    {
+        Singer singer1 = singersList[singer];
+        
+        Console.WriteLine($"\nThe {singer1.Name} score is {singer1.Average}.");
+
+        Console.WriteLine("Press any key to go to the menu again");
+        Console.ReadKey();
+        Console.Clear();
+        ShowMenu();
+
+    }
+    else
+    {
+        Console.WriteLine($"\n{singer} has not found!");
+        Console.WriteLine("Press any key to go to the menu again");
+        Console.ReadKey();
+        Console.Clear();
+        ShowMenu();
+    }
+}
+
+
 #endregion
 
 #region Showing titles
