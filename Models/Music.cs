@@ -1,6 +1,6 @@
 ﻿using Rodfy.Models;
 
-class Music
+public class Music
 {
     public Music(Singer artista, string nome)
     {

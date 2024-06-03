@@ -1,9 +1,9 @@
 ﻿namespace Rodfy.Models;
 
-class Singer
+public class Singer
 {
     private List<Album> albuns = new List<Album>();
-    private List<int> score = new List<int>();
+    private List<Assessment> score = new List<Assessment>();
 
     public Singer(string name)
     {
@@ -11,7 +11,15 @@ class Singer
     }
 
     public string Name { get; }
-    public double Average => score.Average();
+
+    public double Average
+    {
+        get
+        {
+            if (score.Count == 0) return 0;
+            else return score.Average(a => a.score);
+        }
+    }
     public List<Album> Albuns => albuns;
 
     public void AddAlbum(Album album) 
@@ -19,7 +27,7 @@ class Singer
         albuns.Add(album);
     }
 
-    public void AddScore(int score)
+    public void AddScore(Assessment score)
     {
         this.score.Add(score);
     }

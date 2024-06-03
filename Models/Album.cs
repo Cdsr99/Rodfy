@@ -1,6 +1,6 @@
 ﻿namespace Rodfy.Models;
 
-class Album
+public class Album
 {
     private List<Music> _musics = new List<Music>();
 
